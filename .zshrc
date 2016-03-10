@@ -12,6 +12,12 @@ alias r2="r2 -A"
 export PATH=$PATH:~/.bin:~/Documents/Programming/VSCode:~/programming/racket/bin 
 export TERMINAL=sakura
 
+
+function strlen {
+python -c "print(len('$1'))"
+}
+
+
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/spowell/.zshrc'
