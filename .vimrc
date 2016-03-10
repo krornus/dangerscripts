@@ -3,17 +3,17 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-
-Plugin 'gmarik/vundle'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'gmarik/vundle'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<c-tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-e>"
 let g:UltiSnipsJumpBackwardTrigger="<c-q>"
 
+call vundle#end()
 filetype plugin indent on
 
 set number
