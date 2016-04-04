@@ -9,6 +9,7 @@ alias dim="xbacklight -set 5"
 alias hi="xbacklight -set 75"
 alias gdb="gdb -q"
 alias r2="r2 -A"
+alias wifi="sudo wifi-menu"
 export PATH=$PATH:~/.bin:~/Documents/Programming/VSCode:~/programming/racket/bin 
 export TERMINAL=sakura
 

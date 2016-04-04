@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+import argparse
+import re
+
+def get_mnemonic(hxd):
+    hxd = hxd.upper()
+    pattern = r'^' + hxd + '\s+[A-Z]+\s+([a-zA-Z]+\s)+'
+    
+    res = []
+
+    with open("/home/spowell/penetration/docs/8086_table.txt", "r") as f:
+        for line in f:
+            if re.match(pattern, line):
+                res.append(line)
+    return res
+
+def get_opcode(ins):
+
+    ins = ins.upper()
+    pattern = r'^([0-9A-F]{2})\s+' + ins + '\s+([a-zA-Z]+\s)+'
+    
+    res = []
+
+    with open("/home/spowell/penetration/docs/8086_table.txt", "r") as f:
+        for line in f:
+            if re.match(pattern, line):
+                res.append(line)
+    return res
+
+
+def print_res(ary):
+    for item in ary:
+        print(item.strip())
+    
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("instruction", help="Instruction to lookup")
+    parser.add_argument("-x", action="store_true", default=False, help="Lookup using hex code instead of mnemonic")
+    args = parser.parse_args()
+
+    if args.x:
+        print_res(get_mnemonic(args.instruction))
+    else:
+        print_res(get_opcode(args.instruction))
+
