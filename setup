@@ -1,0 +1,12 @@
+#!/bin/sh
+
+sudo pacman -S firefox sakura zsh
+
+echo #!/bin/sh > ~/.xinitrc
+echo exec i3 >> ~/.xinitrc
+
+echo [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx >> ~/.zlogin
+
+curl http://ix.io/oCS > ~/.i3/config
+
+chsh -s /bin/zsh
