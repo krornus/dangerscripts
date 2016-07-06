@@ -10,8 +10,18 @@ alias hi="xbacklight -set 75"
 alias gdb="gdb -q"
 alias r2="r2 -A"
 alias wifi="sudo wifi-menu"
-export PATH=$PATH:~/.bin:~/Documents/Programming/VSCode:~/programming/racket/bin 
+export PATH=$PATH:$HOME/bin:$HOME/sdk/tools
 export TERMINAL=sakura
+
+
+alias ser="./xstack-server/xstack-server"
+alias push="./xstack-msg/xstack-msg 1"
+alias exit="./xstack-msg/xstack-msg 0"
+alias pop="./xstack-msg/xstack-msg 2"
+alias peek="./xstack-msg/xstack-msg 3"
+
+
+
 
 
 function strlen {

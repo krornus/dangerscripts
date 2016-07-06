@@ -1,2 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =0
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/spowell/work/downloader/res'
+let g:netrw_dirhist_2='/home/spowell/work/downloader'
+let g:netrw_dirhist_3='/home/spowell/work'
+let g:netrw_dirhist_4='/home/spowell/work/py_decode'
+let g:netrw_dirhist_5='/home/spowell/work/py_decode/examples'
+let g:netrw_dirhist_6='/home/spowell/work/xperidownload'
+let g:netrw_dirhist_7='/home/spowell/programming/c/xstack/xstack-msg'
