@@ -18,5 +18,4 @@ cd ..
 rm rf tmp
 
 echo '[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx' > $HOME/.zprofile
-echo '#!/bin/bash' > $HOME/.xinitrc
-echo 'exec i3' >> $HOME/.xinitrc
+echo 'exec i3' > $HOME/.xinitrc
