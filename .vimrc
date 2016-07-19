@@ -12,12 +12,21 @@ set mouse=a
 
 syntax on
 
-nmap <F1> :set mouse=<CR>
-nmap <F2> :set mouse=a<CR>
-nmap <F3> :set hlsearch!<CR>
+nnoremap <F1> :set mouse=<CR>
+nnoremap <F2> :set mouse=a<CR>
+nnoremap <F3> :set hlsearch!<CR>
+nnoremap <F4> :set paste!<CR>
 
-imap <F1> :set mouse=<CR>
-imap <F2> :set mouse=a<CR>
-imap <F3> :set hlsearch!<CR>
+inoremap <F1> <ESC>:set mouse=<CR>
+inoremap <F2> <ESC>:set mouse=a<CR>
+inoremap <F3> <ESC>:set hlsearch!<CR>
+inoremap <F4> <ESC>:set paste!<CR>
+inoremap jk <ESC>
 
-nmap Q <nop>
+cnoremap X x
+cnoremap W w
+cnoremap Q q
+
+nnoremap Q <nop>
+
+
