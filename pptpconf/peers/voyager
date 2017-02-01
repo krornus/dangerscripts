@@ -1,0 +1,11 @@
+# Don't include @uccs in username
+
+pty "pptp voyager.uccs.edu --nolaunchpppd"
+lock
+noauth
+nobsdcomp
+nodeflate
+name <username> 
+remotename PPTP
+ipparam voyager 
+require-mppe-128
