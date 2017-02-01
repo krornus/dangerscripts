@@ -1,0 +1,15 @@
+Description='Automatically generated profile by wifi-menu'
+Interface=<interface>
+Connection=wireless
+Security=wpa-configsection
+ESSID=UCCS-Wireless
+IP=dhcp
+WPAConfigSection=(
+  'ssid="UCCS-Wireless"'
+  'key_mgmt=WPA-EAP'
+  'eap=PEAP'
+  'group=CCMP'
+  'pairwise=TKIP CCMP'
+  'identity="<username>"'
+  'password="<password>"'
+)
