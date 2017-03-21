@@ -25,6 +25,7 @@ nnoremap <F1> :set mouse=<CR>
 nnoremap <F2> :set mouse=a<CR>
 nnoremap <F3> :set hlsearch!<CR>
 nnoremap <F4> :set paste!<CR>
+nnoremap <F5> #:%s/<c-r>//
 
 inoremap <F1> <ESC>:set mouse=<CR>
 inoremap <F2> <ESC>:set mouse=a<CR>
