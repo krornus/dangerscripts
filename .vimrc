@@ -33,10 +33,6 @@ inoremap <F3> <ESC>:set hlsearch!<CR>
 inoremap <F4> <ESC>:set paste!<CR>
 inoremap jk <ESC>
 
-cnoremap X x
-cnoremap W w
-cnoremap Q q
-
 nnoremap Q <nop>
 
 set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
