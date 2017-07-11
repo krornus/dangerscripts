@@ -1,6 +1,0 @@
-
-
-#using registers in substitute
-
-%s/{search pattern}/\=@a.submatch(0).@a/g
-
