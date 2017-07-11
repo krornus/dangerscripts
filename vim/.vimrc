@@ -30,7 +30,7 @@ vnoremap <F4> :set paste!<CR>
 
 nnoremap <F5> :%s/\(\<<c-r>=expand("<cword>")<CR>\>\)/
 
-nnoremap <F6> :make
+nnoremap <F6> :make<CR>
 
 nnoremap <F7> :cN<CR>
 nnoremap <c-F7> :cc<CR>
