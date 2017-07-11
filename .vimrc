@@ -1,48 +1,61 @@
-execute pathogen#infect()
-
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-h>"
-let g:UltiSnipsJumpBackwardTrigger="<c-l>"
-
-let g:UltiSnipsEditSplit="vertical"
-
-set number
-set autoindent
+set listchars=trail:·
+set list
 set timeoutlen=100
-set smartindent
-
 set tabstop=4
 set shiftwidth=4
 set expandtab
-
-colorscheme rbog
-
+set autoindent
+set hidden
+set number
+set relativenumber
 set mouse=a
 
 syntax on
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
-nnoremap <F1> :set mouse=<CR>
-nnoremap <F2> :set mouse=a<CR>
+
 nnoremap <F3> :set hlsearch!<CR>
+vnoremap <F3> :set hlsearch!<CR>
+
 nnoremap <F4> :set paste!<CR>
-nnoremap <F5> #:%s/<c-r>//
+vnoremap <F4> :set paste!<CR>
 
-inoremap <F1> <ESC>:set mouse=<CR>
-inoremap <F2> <ESC>:set mouse=a<CR>
-inoremap <F3> <ESC>:set hlsearch!<CR>
-inoremap <F4> <ESC>:set paste!<CR>
-inoremap jk <ESC>
+nnoremap <F5> :%s/\(\<<c-r>=expand("<cword>")<CR>\>\)/
+nnoremap <F6> :make build<CR>
+nnoremap <c-F6> :make run<CR>
+nnoremap <F7> :cN<CR>
+nnoremap <F8> :cn<CR>
+nnoremap <F9> :bN<CR>
+nnoremap <F10> :bn<CR>
+nnoremap <c-F7> :cc<CR>
 
-nnoremap Q <nop>
+nnoremap <F12> :%s/\v\s+$//g<CR>
 
-set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
+inoremap <F1> <nop>
 
 set laststatus=2
 
 set t_Co=256
-
 set encoding=utf-8
-let g:Powerline_symbols='unicode'
 
-hi Normal ctermbg=none
-highlight NonText ctermbg=none
+inoremap jk <Esc>
+
+vnoremap K k
+vnoremap J j
+
+set diffopt+=vertical
+
+colorscheme kalisi
+
+
+
+autocmd BufWrite *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h'). "&" <bar> redraw!
+autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
+
+nnoremap g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
+nnoremap g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
+
+vnoremap g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
+vnoremap g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
+

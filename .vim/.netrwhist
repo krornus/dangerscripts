@@ -1,7 +1,11 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/spowell/penetration/deloitte/asym'
-let g:netrw_dirhist_2='/home/spowell/penetration/tool/scripts'
-let g:netrw_dirhist_3='/home/spowell/.vim/bundle/vim-snippets'
-let g:netrw_dirhist_4='/home/spowell/.vim/bundle/vim-snippets/snippets'
-let g:netrw_dirhist_5='/home/spowell/programming/c/traceme'
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/home/spowell/redstone'
+let g:netrw_dirhist_2='/home/spowell/scripts/field_gen'
+let g:netrw_dirhist_3='/home/spowell/redstone/rust-binja'
+let g:netrw_dirhist_4='/home/spowell/sandbox/src'
+let g:netrw_dirhist_5='/home/spowell/redstone/rust-binja/src'
+let g:netrw_dirhist_6='/home/spowell/sandbox/src'
+let g:netrw_dirhist_7='/home/spowell/redstone/rust-binja'
+let g:netrw_dirhist_8='/home/spowell/redstone'
+let g:netrw_dirhist_9='/home/spowell/redstone/rust-binja'
