@@ -40,6 +40,9 @@ nnoremap <F9> :bN<CR>
 nnoremap <F10> :bn<CR>
 nnoremap <F12> :%s/\v\s+$//g<CR>
 
+nnoremap <s-x> :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+
+
 inoremap jk <ESC>
 
 vnoremap K k
@@ -61,3 +64,5 @@ nnoremap g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
 
 vnoremap g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
 vnoremap g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
+
+cnoremap <C-n> <C-f>i<C-n>
