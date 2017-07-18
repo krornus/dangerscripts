@@ -42,8 +42,8 @@ nnoremap <F12> :%s/\v\s+$//g<CR>
 
 nnoremap <s-x> :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
-
 inoremap jk <ESC>
+cnoremap jk <c-f>
 
 vnoremap K k
 vnoremap J j
