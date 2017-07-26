@@ -40,7 +40,7 @@ nnoremap <F9> :bN<CR>
 nnoremap <F10> :bn<CR>
 nnoremap <F12> :%s/\v\s+$//g<CR>
 
-nnoremap <s-x> :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+nnoremap \ :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
 inoremap jk <ESC>
 cnoremap jk <c-f>
