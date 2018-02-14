@@ -2,12 +2,14 @@ colorscheme kalisi
 
 execute pathogen#infect()
 
-set listchars=trail:·
+set listchars=trail:·,tab:→\
 set list
 set timeoutlen=100
+
 set tabstop=4
 set shiftwidth=4
 set expandtab
+
 set autoindent
 set hidden
 set number
@@ -32,17 +34,18 @@ nnoremap <F5> :%s/\(\<<c-r>=expand("<cword>")<CR>\>\)/
 
 nnoremap <F6> :make<CR>
 
-nnoremap <F7> :cN<CR>
-nnoremap <c-F7> :cc<CR>
+nnoremap <C-Up> :cN<CR>
+nnoremap <C-Down> :cn<CR>
 
-nnoremap <F8> :cn<CR>
-nnoremap <F9> :bN<CR>
-nnoremap <F10> :bn<CR>
+nnoremap <C-Left>  :bN<CR>
+nnoremap <C-Right> :bn<CR>
 nnoremap <F12> :%s/\v\s+$//g<CR>
 
 nnoremap \ :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
+
 inoremap jk <ESC>
+
 cnoremap jk <c-f>
 
 vnoremap K k
@@ -66,3 +69,7 @@ vnoremap g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
 vnoremap g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
 
 cnoremap <C-n> <C-f>i<C-n>
+
+autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
+autocmd BufWrite *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" <bar> redraw!
+

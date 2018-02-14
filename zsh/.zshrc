@@ -1,3 +1,6 @@
+fpath=(.zsh/completions $fpath)
+
+
 HISTFILE=~/.histfile
 SAVEHIST=1000
 
@@ -7,6 +10,21 @@ plugins=(git)
 
 function strlen {
     python -c "print(len('$1'))"
+}
+
+function arches {
+    sudo pon voyager
+    route.sh arches.uccs.edu
+    ssh spowell3@arches.uccs.edu
+}
+
+function shd {
+    setsid $@ >/dev/null 2>&1 < /dev/null &
+}
+
+function twitch {
+    shd streamlink https://go.twitch.tv/$1 720p
+    weechat -r "/set irc.server.twitch.autojoin #$1;/connect twitch;/unset irc.server.twitch.autojoin #$1"
 }
 
 setopt autocd
@@ -19,7 +37,15 @@ setopt no_share_history
 
 DIRSTACKSIZE=32
 setopt autopushd pushdminus pushdsilent pushdtohome
+
 alias dh='dirs -v'
+alias vzm='vim $(fzf)'
+alias vless="vim -c 'setlocal buftype=nofile' -"
+alias gdb="gdb -q"
+alias copy="xclip -selection c"
+alias paste="xclip -o -selection c"
+
+export RUST_SRC_PATH=$(rustc --print sysroot)/lib/rustlib/src/rust/src/
 
 autoload -U compinit promptinit
 compinit
@@ -34,12 +60,6 @@ export RUST_SRC_PATH=$(rustc --print sysroot)/lib/rustlib/src/rust/src/
 
 if [[ "$CASE_SENSITIVE" = true ]]; then
     zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
-else
-    if [[ "$HYPHEN_INSENSITIVE" = true ]]; then
-        zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
-    else
-        zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-    fi
 fi
 
 autoload -U up-line-or-beginning-search
