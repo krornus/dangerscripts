@@ -1,1 +1,7 @@
+import rlcompleter, readline
+readline.parse_and_bind('tab: complete')
+
 set editing-mode vi
+
+"\C-u": backward-kill-line
+"\C-l": clear-screen
