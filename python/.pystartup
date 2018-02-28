@@ -1,0 +1,8 @@
+import rlcompleter
+import readline
+
+with open("/home/spowell/.inputrc","r") as f:
+    for line in f:
+        line = line.strip()
+        if line:
+            readline.parse_and_bind(line)

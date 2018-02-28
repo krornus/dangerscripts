@@ -1,3 +1,0 @@
-#! /bin/bash
-sudo netctl start wlp13s0-UCCS-Wireless
-

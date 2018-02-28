@@ -1,7 +1,8 @@
 if exists("current_compiler")
     finish
 endif
-let current_compiler = "python"
+
+let current_compiler="python2"
 
 let s:cpo_save = &cpo
 set cpo-=C

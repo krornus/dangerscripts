@@ -28,6 +28,8 @@ function twitch {
 }
 
 setopt autocd
+setopt extended_glob
+
 bindkey -v
 
 PROMPT="%B%K{blue} %T %k%b $ "
@@ -55,8 +57,7 @@ zstyle ':completion:*' menu select
 setopt COMPLETE_ALIASES
 
 alias ls="ls -F --color=auto"
-
-export RUST_SRC_PATH=$(rustc --print sysroot)/lib/rustlib/src/rust/src/
+export PYTHONSTARTUP="$HOME/.pystartup"
 
 if [[ "$CASE_SENSITIVE" = true ]]; then
     zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'

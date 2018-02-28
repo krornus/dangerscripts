@@ -1,4 +1,0 @@
-#!/bin/bash
-gcc -Wall -o $2 -z -fno-stack-protector $1
-chmod 754 $2
-

@@ -1,7 +1,0 @@
-#!/bin/zsh
-if [[ "$#" == "2" ]]; then
-    python2 getpass.py $1 $2 | xclip -selection c
-else
-    echo 'usage: getpass.py [-h] password url'
-fi
-
