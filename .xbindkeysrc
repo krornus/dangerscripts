@@ -1,0 +1,11 @@
+"shutdown now"
+  XF86PowerOff
+
+"amixer set Master 10%+"
+  XF86AudioRaiseVolume
+
+"amixer set Master 10%-"
+  XF86AudioLowerVolume
+
+"amixer set Master 0%"
+  XF86AudioMute

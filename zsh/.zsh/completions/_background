@@ -1,0 +1,36 @@
+#compdef background
+_arguments -s \
+    '--help[print help]'\
+    '-h[print help]'\
+    '--save-images+[save image list]:image list:_path_files'\
+    '--load-images+[load image list]:image list:_path_files'\
+    '--server[run server daemon]'\
+    '--setting+[setting \[value\]]'\
+    '-s+[setting \[value\]]'\
+    '--pause[pause cycling]'\
+    '--resume[resume cycling]'\
+    '--previous[previous background]'\
+    '-p[previous background]'\
+    '--next[next background]'\
+    '--undo[undo action]'\
+    '-u[undo action]'\
+    '-n[next background]'\
+    '--remove[remove background]'\
+    '-r[remove background]'\
+    '--list-settings[list settings]'\
+    '--save[save settings \[file\]]:save:_path_files'\
+    '--reload[reload settings and backgrounds]'\
+    '--refresh[refresh settings]'\
+    '-r[refresh settings]'\
+    '--set-images[set image list \[path\]]:path:_path_files'\
+    '-i[set image list \[path\]]:path:_path_files'\
+    '--get-images[get image list]'\
+    '-l[get image list]'\
+    '--append-images[append image list \[path\]]:path:_path_files'\
+    '-a[append image list \[path\]]:path:_path_files'\
+    '-w[writeback]'\
+    '--writeback[writeback]'\
+    '--verbose[verbose]'\
+    '-v[verbose]'\
+    '-q[exit]'\
+    '--exit[exit]'\
