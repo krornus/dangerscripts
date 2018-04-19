@@ -27,6 +27,8 @@ inoremap <F1> <nop>
 nnoremap <F3> :set hlsearch!<CR>
 vnoremap <F3> :set hlsearch!<CR>
 
+nnoremap <c-6> <c-^>
+
 nnoremap <F4> :set paste!<CR>
 vnoremap <F4> :set paste!<CR>
 
@@ -37,8 +39,9 @@ nnoremap <F6> :make<CR>
 nnoremap <C-Up> :cN<CR>
 nnoremap <C-Down> :cn<CR>
 
-nnoremap <C-Left>  :bN<CR>
-nnoremap <C-Right> :bn<CR>
+nnoremap <silent> <C-Right> :bn<CR>
+nnoremap <silent> <C-Left> :bp<CR>
+
 nnoremap <F12> :%s/\v\s+$//g<CR>
 
 nnoremap \ :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
@@ -72,3 +75,7 @@ cnoremap <C-n> <C-f>i<C-n>
 
 autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
 autocmd BufWrite *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" <bar> redraw!
+
+let g:airline_powerline_fonts = 1
+let g:airline_theme='murmur'
+let g:bufferline_echo = 0
