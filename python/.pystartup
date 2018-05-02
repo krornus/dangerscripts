@@ -1,8 +1,34 @@
 import rlcompleter
 import readline
+from sys import argv
+import os
 
-with open("/home/spowell/.inputrc","r") as f:
-    for line in f:
-        line = line.strip()
-        if line:
-            readline.parse_and_bind(line)
+def bind(f):
+    python = False
+    with open(f) as f:
+        for line in f:
+            line = line.strip()
+            if line == "#!python":
+                python = True
+                continue
+            if line and not python:
+                readline.parse_and_bind(line)
+            elif line and python:
+                exec(line,globals())
+
+if len(argv) > 0:
+
+    path = os.path.abspath(os.getcwd())
+    file = os.path.join(path, ".inputrc")
+
+    files = []
+
+    while path != "/":
+        if os.path.exists(file):
+            files.append(file)
+
+        path = os.path.dirname(path)
+        file = os.path.join(path, ".inputrc")
+
+    while files:
+        bind(files.pop())
