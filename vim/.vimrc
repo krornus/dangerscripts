@@ -1,6 +1,8 @@
-colorscheme kalisi
+set background=dark
 
 execute pathogen#infect()
+execute pathogen#helptags()
+
 
 set listchars=trail:·,tab:→\
 set list
@@ -62,8 +64,6 @@ set t_Co=256
 set encoding=utf-8
 let g:Powerline_symbols='unicode'
 
-hi Normal ctermbg=none
-highlight NonText ctermbg=none
 
 nnoremap g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
 nnoremap g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
@@ -79,3 +79,7 @@ autocmd BufWrite *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expa
 let g:airline_powerline_fonts = 1
 let g:airline_theme='murmur'
 let g:bufferline_echo = 0
+
+colorscheme kalisi
+highlight Normal ctermbg=NONE
+hi NonText ctermbg=NONE

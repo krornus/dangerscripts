@@ -24,7 +24,7 @@ function shd {
 
 function twitch {
     shd streamlink https://go.twitch.tv/$1 720p
-    weechat -r "/set irc.server.twitch.autojoin #$1;/connect twitch;/unset irc.server.twitch.autojoin #$1"
+    weechat -r "/connect irc://$TWITCHNICK@irc.chat.twitch.tv:6667/$1" -password=$TWITCHOAUTH
 }
 
 setopt autocd
@@ -32,7 +32,7 @@ setopt extended_glob
 
 bindkey -v
 
-PROMPT="%B%K{blue} %T %k%b $ "
+PROMPT="%B%K{blue} %T %k%b -> "
 RPROMPT='%~'
 
 setopt no_share_history
