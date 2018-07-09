@@ -21,6 +21,7 @@ set relativenumber
 set diffopt+=vertical
 
 syntax on
+filetype on
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 
@@ -64,7 +65,6 @@ set t_Co=256
 set encoding=utf-8
 let g:Powerline_symbols='unicode'
 
-
 nnoremap g<C-]> :cs find 3 <C-R>=expand("<cword>")<CR><CR>
 nnoremap g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
 
@@ -77,7 +77,7 @@ autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
 autocmd BufWrite *.rs :silent! exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" <bar> redraw!
 
 let g:airline_powerline_fonts = 1
-let g:airline_theme='murmur'
+let g:airline_theme='violet'
 let g:bufferline_echo = 0
 
 colorscheme kalisi
