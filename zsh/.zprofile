@@ -1,5 +1,3 @@
-export PLAN9=/usr/local/plan9port
-export PATH=$PATH:$PLAN9/bin
 export WORKON_HOME=$HOME/.virtualenvs
 export TMUX_TMPDIR=/tmp
 export VIM_ANYWHERE_TERM="sakura -x '%s'"

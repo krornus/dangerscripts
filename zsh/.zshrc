@@ -12,12 +12,6 @@ function strlen {
     python -c "print(len('$1'))"
 }
 
-function arches {
-    sudo pon voyager
-    route.sh arches.uccs.edu
-    ssh spowell3@arches.uccs.edu
-}
-
 function shd {
     setsid $@ >/dev/null 2>&1 < /dev/null &
 }
@@ -72,5 +66,18 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
 
-export WORKON_HOME=~/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
+
+function virtualenv {
+    export WORKON_HOME=~/.virtualenvs
+    source /usr/bin/virtualenvwrapper.sh
+}
+
+function command_not_found_handler() {
+    output=$(python2 -c '$1' 2> /dev/null)
+    if [ $? -eq 0 ]; then
+        echo $output
+    else
+        echo "zsh: command not found: $1"
+    fi
+}
+
