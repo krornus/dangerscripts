@@ -1,44 +1,65 @@
-colorscheme gruvbox
-
-alias global x write-quit
-alias global W write
-
-set-option global ui_options ncurses_status_on_top=true
-set-option global makecmd 'make -j8'
-set-option global ui_options ncurses_status_on_top=true
-set-option global tabstop 4
-set-option global indentwidth 4
-
 ################################
-#   highlight trailing spaces  #
+#           plugins            #
 ################################
-add-highlighter global regex '[ \t\f\v]+$' 0:default,black
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
 
-################################
-#     relative line numbers    #
-################################
-hook global WinCreate ^[^*]+$ %{
-    add-highlighter window number_lines -relative -hlcursor
+plug "Delapouite/kakoune-buffers"
+plug "Delapouite/kakoune-auto-percent"
+plug "Delapouite/kakoune-auto-star"
+plug "Delapouite/kakoune-cd"
+
+plug "occivink/kakoune-phantom-selection"
+plug "occivink/kakoune-sudo-write"
+
+# TODO: fork plugin - dont backspace multi if not ^\s+<cursor>
+plug "andreyorst/smarttab.kak" %{
+    set-option global softtabstop %opt{tabstop}
 }
 
-################################
-#        cscope support        #
-################################
-map -docstring 'cscope menu' global user 'c' '<a-i>w:cscope-menu<ret>'
 
 ################################
-#       Tabs to spaces         #
+#           options            #
 ################################
-hook global InsertChar \t %{ try %{
-    execute-keys -draft "h<a-h><a-k>\A\h+\z<ret><a-;>;%opt{indentwidth}@"
-}}
-hook global InsertDelete ' ' %{ try %{
-    execute-keys -draft 'h<a-h><a-k>\A\h+\z<ret>i<space><esc><lt>'
-}}
+colorscheme google
+
+set-option global tabstop 4
+set-option global indentwidth 0
+set-option global ui_options ncurses_status_on_top=true
+set-option global makecmd 'make -j4'
 
 ################################
-#      Tab smart complete      #
+#             maps             #
 ################################
+alias global x write-quit
+alias global W write
+alias global pwd print-working-directory
+# defined in toggle.kak
+toggle-map global normal <F3> hlsearch-on hlsearch-off
+map global normal <#> *
+map -docstring "select-comeplement" global user s :select-complement<ret>
+map -docstring "next phantom selection" global goto n <esc>:phantom-sel-iterate-next<ret>
+map -docstring "prev phantom selection" global goto p <esc>:phantom-sel-iterate-prev<ret>
+map -docstring "clear phantom selection" global user c <esc>:phantom-sel-clear<ret>
+map -docstring "add phantom selection" global user a <esc>:phantom-sel-add-selection<ret>
+################################
+#           hooks              #
+################################
+# _always_ expandtab
+hook -once global WinCreate .* %{
+    expandtab
+}
+
+# change to file's directory when editing
+hook global WinDisplay ^[^*]+$ %{ try %{
+    change-directory-current-buffer
+}}
+
+# relative line numbers
+hook global WinCreate ^[^*]+$ %{
+    add-highlighter window/relnum number-lines -relative -hlcursor
+}
+
+# Tab smart complete
 hook global InsertCompletionShow .* %{ try %{
     execute-keys -draft 'h<a-K>\h<ret>'
     map window insert <tab> <c-n>
@@ -50,27 +71,28 @@ hook global InsertCompletionHide .* %{
 }
 
 ################################
-#          Jump windows        #
+#          highlighters        #
+################################
+# Highlight trailing spaces
+add-highlighter global/trailing regex '[ \t\f\v]+$' 0:default,black
+
+
+################################
+#           commands           #
 ################################
 define-command extern %{
     rename-client main
     set-option global jumpclient main
-
     new rename-client extern
     set-option global toolsclient extern
     set-option global docsclient extern
 }
 
-################################
-#  Highlight search w/ toggle  #
-################################
+#  Toggle highlight search
 define-command hlsearch-off %{
-    remove-highlighter global/dynregex_\%reg{<slash>}
+    remove-highlighter global/hltoggle
 }
 define-command hlsearch-on %{
-    add-highlighter global dynregex '%reg{/}' 0:white,rgb:222222+ub
+    add-highlighter global/hltoggle dynregex '%reg{/}' 0:white,rgb:222222+ub
 }
 
-# defined in toggle.kak
-toggle-map global normal <F3> hlsearch-on hlsearch-off
-map global normal <#> "/\b<c-r>.\b<ret>"
