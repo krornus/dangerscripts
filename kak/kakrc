@@ -5,7 +5,6 @@ source "%val{config}/plugins/plug.kak/rc/plug.kak"
 
 plug "Delapouite/kakoune-buffers"
 plug "Delapouite/kakoune-auto-percent"
-plug "Delapouite/kakoune-auto-star"
 plug "Delapouite/kakoune-cd"
 
 plug "occivink/kakoune-phantom-selection"
@@ -16,6 +15,12 @@ plug "andreyorst/smarttab.kak" %{
     set-option global softtabstop %opt{tabstop}
 }
 
+plug "krornus/kakoune-git-diff"
+plug "krornus/kakoune-toggle-map" %{
+    plug "krornus/kakoune-hlsearch" %{
+        toggle-map global normal <F3> hlsearch-on hlsearch-off
+    }
+}
 
 ################################
 #           options            #
@@ -33,9 +38,7 @@ set-option global makecmd 'make -j4'
 alias global x write-quit
 alias global W write
 alias global pwd print-working-directory
-# defined in toggle.kak
-toggle-map global normal <F3> hlsearch-on hlsearch-off
-map global normal <#> *
+
 map -docstring "select-comeplement" global user s :select-complement<ret>
 map -docstring "next phantom selection" global goto n <esc>:phantom-sel-iterate-next<ret>
 map -docstring "prev phantom selection" global goto p <esc>:phantom-sel-iterate-prev<ret>
@@ -51,7 +54,7 @@ hook -once global WinCreate .* %{
 
 # change to file's directory when editing
 hook global WinDisplay ^[^*]+$ %{ try %{
-    change-directory-current-buffer
+    #change-directory-current-buffer
 }}
 
 # relative line numbers
@@ -76,7 +79,6 @@ hook global InsertCompletionHide .* %{
 # Highlight trailing spaces
 add-highlighter global/trailing regex '[ \t\f\v]+$' 0:default,black
 
-
 ################################
 #           commands           #
 ################################
@@ -87,12 +89,3 @@ define-command extern %{
     set-option global toolsclient extern
     set-option global docsclient extern
 }
-
-#  Toggle highlight search
-define-command hlsearch-off %{
-    remove-highlighter global/hltoggle
-}
-define-command hlsearch-on %{
-    add-highlighter global/hltoggle dynregex '%reg{/}' 0:white,rgb:222222+ub
-}
-
