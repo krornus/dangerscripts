@@ -1,14 +1,17 @@
 
-############################################################
-#                                                          #
-# Creates new ways to define kakoune-style motion commands #
-#                                                          #
-# The main commands provided are:                          #
-#   create-movement-command                                #
-#   (select|extend)-(forward|backward)-regex-(start|end)   #
-#   (select|extend)-by-command                             #
-#                                                          #
-############################################################
+################################################################
+#                                                              #
+# Creates new ways to define kakoune-style motion commands     #
+#   i.e. given a command which moves to a point in the file    #
+#   create a way to select from cursor->new position           #
+#   create a way to extend selection from cursor->new position #
+#                                                              #
+# The main commands provided are:                              #
+#   create-movement-command                                    #
+#   (select|extend)-(forward|backward)-regex-(start|end)       #
+#   (select|extend)-by-command                                 #
+#                                                              #
+################################################################
 
 define-command -params 1 extend-to-offset -docstring %{
 extend-to-offset <offset>
@@ -19,7 +22,7 @@ extend-to-offset <offset>
             if [ $kak_cursor_byte_offset -lt $1 ]; then
                 offset=$(($1-$kak_cursor_byte_offset))
                 echo execute-keys "${offset}L"
-            else
+            elif [ $kak_cursor_byte_offset -gt $1 ]; then
                 offset=$(($kak_cursor_byte_offset-$1))
                 echo execute-keys "${offset}H"
             fi
