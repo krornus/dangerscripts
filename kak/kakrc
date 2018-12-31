@@ -15,6 +15,7 @@ plug "andreyorst/smarttab.kak" %{
 }
 
 plug "krornus/kakoune-mouvre"
+plug "krornus/kakoune-git"
 plug "krornus/kakoune-toggle-map" %{
     plug "krornus/kakoune-hlsearch" %{
         toggle-map global normal <F3> hlsearch-on hlsearch-off
