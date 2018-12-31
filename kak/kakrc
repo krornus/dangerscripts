@@ -7,7 +7,6 @@ plug "Delapouite/kakoune-buffers"
 plug "Delapouite/kakoune-auto-percent"
 plug "Delapouite/kakoune-cd"
 
-plug "occivink/kakoune-phantom-selection"
 plug "occivink/kakoune-sudo-write"
 
 # TODO: fork plugin - dont backspace multi if not ^\s+<cursor>
@@ -15,7 +14,7 @@ plug "andreyorst/smarttab.kak" %{
     set-option global softtabstop %opt{tabstop}
 }
 
-plug "krornus/kakoune-git-diff"
+plug "krornus/kakoune-mouvre"
 plug "krornus/kakoune-toggle-map" %{
     plug "krornus/kakoune-hlsearch" %{
         toggle-map global normal <F3> hlsearch-on hlsearch-off
@@ -39,26 +38,19 @@ alias global x write-quit
 alias global W write
 alias global pwd print-working-directory
 
-map -docstring "select-comeplement" global user s :select-complement<ret>
-map -docstring "next phantom selection" global goto n <esc>:phantom-sel-iterate-next<ret>
-map -docstring "prev phantom selection" global goto p <esc>:phantom-sel-iterate-prev<ret>
-map -docstring "clear phantom selection" global user c <esc>:phantom-sel-clear<ret>
-map -docstring "add phantom selection" global user a <esc>:phantom-sel-add-selection<ret>
+map -docstring "comment line" global user c <esc>:comment-line<ret>
+map -docstring "path mode" global user p %{<esc>:enter-user-mode path<ret>}
+map -docstring "path mode (lock)" global user P %{<esc>:enter-user-mode -lock path<ret>}
+
 ################################
 #           hooks              #
 ################################
-# _always_ expandtab
-hook -once global WinCreate .* %{
+hook global WinCreate .* %{
     expandtab
 }
 
-# change to file's directory when editing
-hook global WinDisplay ^[^*]+$ %{ try %{
-    #change-directory-current-buffer
-}}
-
 # relative line numbers
-hook global WinCreate ^[^*]+$ %{
+hook global WinCreate (?S)^[^*].+[^*]$ %{
     add-highlighter window/relnum number-lines -relative -hlcursor
 }
 
@@ -72,6 +64,11 @@ hook global InsertCompletionHide .* %{
     unmap window insert <tab> <c-n>
     unmap window insert <s-tab> <c-p>
 }
+
+hook global InsertChar k %{ try %{
+    exec -draft hH<a-k>jk<ret>d
+    exec <esc>
+}}
 
 ################################
 #          highlighters        #
