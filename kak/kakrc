@@ -16,6 +16,7 @@ plug "andreyorst/smarttab.kak" %{
 
 plug "krornus/kakoune-mouvre"
 plug "krornus/kakoune-git"
+plug "krornus/kakoune-cargo"
 plug "krornus/kakoune-toggle-map" %{
     plug "krornus/kakoune-hlsearch" %{
         toggle-map global normal <F3> hlsearch-on hlsearch-off
@@ -76,6 +77,7 @@ hook global InsertChar k %{ try %{
 ################################
 # Highlight trailing spaces
 add-highlighter global/trailing regex '[ \t\f\v]+$' 0:default,black
+add-highlighter global/matching show-matching
 
 ################################
 #           commands           #
