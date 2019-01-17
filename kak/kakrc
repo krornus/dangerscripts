@@ -14,6 +14,8 @@ plug "andreyorst/smarttab.kak" %{
     set-option global softtabstop %opt{tabstop}
 }
 
+plug "danr/kakoune-easymotion"
+
 plug "krornus/kakoune-mouvre"
 plug "krornus/kakoune-git"
 plug "krornus/kakoune-cargo"
@@ -27,7 +29,7 @@ plug "krornus/kakoune-toggle-map" %{
 ################################
 #           options            #
 ################################
-colorscheme google
+colorscheme intruige
 
 set-option global tabstop 4
 set-option global indentwidth 0
@@ -77,7 +79,7 @@ hook global InsertChar k %{ try %{
 #          highlighters        #
 ################################
 # Highlight trailing spaces
-add-highlighter global/trailing regex '[ \t\f\v]+$' 0:default,black
+add-highlighter global/trailing regex '[ \t\f\v]+$' 0:Whitespace
 add-highlighter global/matching show-matching
 
 ################################

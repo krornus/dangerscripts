@@ -1,1 +1,0 @@
-curl http://ix.io/$1 > $2

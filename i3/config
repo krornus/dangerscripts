@@ -10,34 +10,23 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 
-#exec --no-startup-id xsetroot -solid "#333333"
-exec --no-startup-id feh --bg-fill /tmp/backgrounder.img
-exec --no-startup-id compton --config /home/spowell/.compton.conf -b
-exec --no-startup-id backgrounder -s
-#exec --no-startup-id xstack-server
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Droid Sans 8
-
+font Hack 8
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-#bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec sakura
+bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec rofi -show
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+d exec dmenu_run
 
 for_window [class="^.*"] border pixel 5
 
@@ -120,7 +109,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec i3-msg exit
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -147,47 +136,24 @@ mode "resize" {
 }
 
 bar {
-    font pango:Droid Sans Mono for Powerline, Icons 12
-    position top
     status_command "i3status"
+    position top
+
     colors {
-        separator #666666
-        background #000000
-        statusline #dddddd
-        focused_workspace #0088CC #0088CC #ffffff
-        active_workspace #333333 #333333 #ffffff
-        inactive_workspace #333333 #333333 #888888
-        urgent_workspace #2f343a #900000 #ffffff
+        statusline #dc143c
+        background #232323
     }
 }
 
-
-
-
 bindsym $mod+r mode "resize"
 
-
-# Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pulseaudio-ctl up
-bindsym XF86AudioLowerVolume exec --no-startup-id pulseaudio-ctl down
-bindsym XF86AudioMute exec --no-startup-id pulseaudio-ctl mute
-
-
-# Backlight Controls
-bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 3
-bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 3
-
-
 # Shutdown modes
-
-set $Locker "betterlockscreen --lock"
-exec --no-startup-id betterlockscreen -u /home/spowell/pictures/backgrounds
-
+set $Locker "slock"
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 
 mode "$mode_system" {
-    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym --release l exec --no-startup-id $Locker, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
     bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
     bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
@@ -201,30 +167,11 @@ mode "$mode_system" {
 
 bindsym $mod+Insert mode "$mode_system"
 
-bindsym $mod+i exec google-chrome-stable
-bindsym $mod+shift+w exec vim-anywhere
-
+bindsym $mod+i exec firefox
 bindsym $mod+shift+n exec i3-input -F 'rename workspace to "%s"' -P 'New name for this workspace: '
-
-set $xstack [p]ush, p[o]p, p[e]ek
-
-mode "$xstack" {
-
-    bindsym p mode "default", exec xstack-msg push
-    bindsym e mode "default", exec xstack-msg peek
-    bindsym o mode "default", exec xstack-msg pop
-
-    bindsym Escape mode "default"
-    bindsym Return mode "default"
-}
-
-#bindsym $mod+p mode "$xstack"
-bindsym --release $mod+bracketleft exec xstack-msg pop
-bindsym --release $mod+Shift+bracketleft exec xstack-msg peek
-bindsym --release $mod+bracketright exec xstack-msg push
-
-
-hide_edge_borders both
-
-
 bindsym $mod+p workspace back_and_forth
+
+bindsym --release $mod+control+l exec --no-startup-id $Locker
+
+hide_edge_borders smart
+
