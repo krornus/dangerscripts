@@ -8,20 +8,16 @@ set-option global indentwidth   0
 set-option global ui_options ncurses_status_on_top=true
 set-option global softtabstop %opt{tabstop}
 
-set-option global jumpclient client0
-set-option global toolsclient client1
-set-option global docsclient client1
+declare-option str jumpclient client0
+declare-option str toolsclient client1
+declare-option str docsclient client1
 
 ################################
 #             maps             #
 ################################
 alias global x write-quit
 alias global W write
-alias global t ctags-search
 alias global pwd print-working-directory
-alias global rns rename-session
-alias global rnc rename-client
-alias global cdcb change-directory-current-buffer
 alias global on buffer-only
 
 toggle-map global normal <F3> hlsearch-on hlsearch-off
@@ -31,10 +27,10 @@ map -docstring "comment block" global user C "<esc>: comment-block<ret>"
 map -docstring "run macro @ (itersel)" global user e "<esc>: execute-keys -itersel %reg{@}<ret>"
 map -docstring "make-previous-error" global user p ": make-previous-error<ret>"
 map -docstring "make-next-error" global user n ": make-next-error<ret>"
-map -docstring "make" global user m ": make<ret>"
+map -docstring "make-build" global user m ": make build<ret>"
+map -docstring "make-run" global user r ": make run<ret>"
 map -docstring "buffer-mode" global user b ": enter-user-mode buffers<ret>"
 map -docstring "eval selection" global user x ": <c-r>.<ret>"
-map -docstring "ctags-search" global user t ": ctags-search<ret>"
 
 # b->q, q->user mode, b->buffers mode
 map global normal q b
@@ -42,19 +38,10 @@ map global normal Q B
 map global normal <a-q> <a-b>
 map global normal <a-Q> <a-B>
 map global normal b ": enter-user-mode buffers<ret>"
-
-# this doesn't work atm? don't really care so ignoring
 map -docstring "replay macro" global user q q
 map -docstring "record macro" global user Q Q
 
-# add location to jumplist before searching
-map global normal / <c-s>/
-map global normal ? <c-s>?
-map global normal <a-/> <c-s><a-/>
-map global normal <a-?> <c-s><a-?>
-map global normal * <c-s>*
-
-# highlight pasted contents
+# highlight paste
 map global normal p %{puU}
 map global normal P %{PuU}
 
@@ -72,7 +59,7 @@ hook global WinCreate (?S)^[^*].+[^*]$ %{
     add-highlighter window/relnum number-lines -relative -hlcursor
 }
 
-# tab complete
+# tab  complete
 hook global InsertCompletionShow .* %{ try %{
     execute-keys -draft 'h<a-K>\h<ret>'
     map window insert <tab> <c-n>
@@ -101,8 +88,3 @@ add-highlighter global/matching show-matching
 #          local kakrc         #
 ################################
 source-all ".kakrc"
-
-hook -group local-kakrc global BufWritePost .*\.kakrc %{
-    execute-keys %{: source <c-r>%<ret>: make clean<ret>}
-}
-
