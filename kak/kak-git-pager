@@ -1,5 +1,5 @@
 #!/bin/sh
-kak -n -e 'source /usr/share/kak/rc/core/diff.kak
+kak -n -e 'source /usr/share/kak/rc/filetype/diff.kak
        source /home/spowell/.config/kak/plugins/kakoune-termcolor/tc.kak
-       source /usr/share/kak/rc/core/doc.kak
+       source /usr/share/kak/rc/tools/doc.kak
        map global normal q :quit<ret>'

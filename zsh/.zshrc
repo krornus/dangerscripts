@@ -1,62 +1,54 @@
+# The following lines were added by compinstall
+zstyle ':completion:*' add-space true
+zstyle ':completion:*' completer _expand _complete _ignored _match _approximate _prefix
+zstyle ':completion:*' completions 1
+zstyle ':completion:*' glob 1
+zstyle ':completion:*' ignore-parents parent pwd
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._-]=** r:|=**' 'l:|=* r:|=*'
+zstyle ':completion:*' match-original both
+zstyle ':completion:*' max-errors 2 not-numeric
+zstyle ':completion:*' menu select=1
+zstyle ':completion:*' original false
+zstyle ':completion:*' prompt '?> %e'
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' substitute 1
+zstyle :compinstall filename '/home/spowell/.zshrc'
 
-plugins=(git)
-
-function strlen {
-    python -c "print(len('$1'))"
-}
-
-function shd {
-    setsid $@ >/dev/null 2>&1 < /dev/null &
-}
-
-function exit_color() {
-    if [[ $? -ne 0 ]]; then
-        echo '%K{red}'
-    else
-        echo '%K{blue}'
-    fi
-}
-
-PROMPT='%B$(exit_color) %T %k%b -> '
-RPROMPT='%~'
-
-DIRSTACKSIZE=32
-HISTFILE=~/.histfile
-SAVEHIST=1000
-
-CASE_SENSITIVE="true"
-
-setopt autocd
-setopt extended_glob
-
-bindkey -v
-
-setopt PROMPT_SUBST
-setopt no_share_history
-setopt autopushd pushdminus pushdsilent pushdtohome
-
-alias gdb="gdb -q"
-alias copy="xclip -selection c"
-alias paste="xclip -o -selection c"
-
-alias ls="ls --color=auto -F"
-alias grep="grep --color=auto"
-alias tree="tree -F -C"
-alias ip="ip --color=auto"
-
-autoload -U compinit promptinit
+autoload -Uz compinit
 compinit
-promptinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+setopt autocd extendedglob
+unsetopt appendhistory beep
+bindkey -v
+# End of lines configured by zsh-newuser-install
 
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+pl_slash=$(printf '\xee\x82\xbc')
 
-setopt COMPLETE_ALIASES
+function virtual_env_prompt () {
+    if [ -z ${VENV_SOURCED} ]; then
+        source /usr/bin/virtualenvwrapper.sh
+        VENV_SOURCED=1
+    fi
+    REPLY=${VIRTUAL_ENV+(${VIRTUAL_ENV:t}) }
+}
 
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
+grml_theme_add_token arrow '--> ' '' ''
+grml_theme_add_token pl-slash "${pl_slash}" '' '%f%b%k'
+grml_theme_add_token virtual-env -f virtual_env_prompt '%F{26}' '%f'
 
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
+zstyle ':prompt:grml:*:items:time' pre   '%B%K{blue}'
+zstyle ':prompt:grml:*:items:time' post  '%f%k'
+zstyle ':prompt:grml:*:items:time' token " %D{%H:%M} %b%F{blue}%K{89}${pl_slash}"
 
-bindkey "^[[A" up-line-or-beginning-search
-bindkey "^[[B" down-line-or-beginning-search
+zstyle ':prompt:grml:*:items:path' pre   '%K{89}'
+zstyle ':prompt:grml:*:items:path' post  '%b%k%f'
+zstyle ':prompt:grml:*:items:path' token " %40<..<%~%<< %b%k%F{89}${pl_slash} "
+zstyle ':prompt:grml:left:setup' items rc time change-root path vcs newline arrow
+
+eval "$(direnv hook zsh)"
