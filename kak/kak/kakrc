@@ -4,9 +4,10 @@
 colorscheme intruige
 
 set-option global tabstop 4
-set-option global indentwidth   0
-set-option global ui_options ncurses_status_on_top=true
 set-option global softtabstop %opt{tabstop}
+
+set-option global indentwidth 0
+set-option global ui_options ncurses_status_on_top=true
 
 declare-option str jumpclient client0
 declare-option str toolsclient client1
@@ -15,6 +16,8 @@ declare-option str docsclient client1
 ################################
 #             maps             #
 ################################
+alias global rns  rename-session
+alias global cdc  change-directory-current-buffer
 alias global x write-quit
 alias global W write
 alias global pwd print-working-directory
@@ -27,11 +30,17 @@ map -docstring "comment block" global user C "<esc>: comment-block<ret>"
 map -docstring "run macro @ (itersel)" global user e "<esc>: execute-keys -itersel %reg{@}<ret>"
 map -docstring "make-previous-error" global user p ": make-previous-error<ret>"
 map -docstring "make-next-error" global user n ": make-next-error<ret>"
-map -docstring "make-build" global user m ": make build<ret>"
+map -docstring "make" global user m ": make<ret>"
 map -docstring "make-run" global user r ": make run<ret>"
 map -docstring "buffer-mode" global user b ": enter-user-mode buffers<ret>"
 map -docstring "eval selection" global user x ": <c-r>.<ret>"
 
+# add searches to jumplist
+map global normal * <c-s>*
+map global normal / <c-s>/
+map global normal ? <c-s>?
+map global normal <a-/> <c-s><a-/>
+map global normal <a-?> <c-s><a-?>
 # b->q, q->user mode, b->buffers mode
 map global normal q b
 map global normal Q B
