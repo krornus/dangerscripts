@@ -1,0 +1,1 @@
+/usr/share/kak/rc/windowing/repl/x11.kak

@@ -25,6 +25,10 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt autocd extendedglob
 unsetopt appendhistory beep
+
+setopt no_share_history
+unsetopt share_history
+
 bindkey -v
 # End of lines configured by zsh-newuser-install
 
@@ -37,6 +41,16 @@ function virtual_env_prompt () {
     fi
     REPLY=${VIRTUAL_ENV+(${VIRTUAL_ENV:t}) }
 }
+
+function copy() {
+    xclip -selection c
+}
+
+function paste() {
+    xclip -selection c -o
+}
+
+alias cdr="cd $(realpath $PWD)"
 
 grml_theme_add_token arrow '--> ' '' ''
 grml_theme_add_token pl-slash "${pl_slash}" '' '%f%b%k'
