@@ -32,15 +32,15 @@ unsetopt share_history
 bindkey -v
 # End of lines configured by zsh-newuser-install
 
-pl_slash=$(printf '\xee\x82\xbc')
+autoload -Uz compinit
+compinit
 
-function virtual_env_prompt () {
-    if [ -z ${VENV_SOURCED} ]; then
-        source /usr/bin/virtualenvwrapper.sh
-        VENV_SOURCED=1
-    fi
-    REPLY=${VIRTUAL_ENV+(${VIRTUAL_ENV:t}) }
-}
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+
+zstyle ':completion:*:*:cdr:*:*' menu selection
+zstyle ':chpwd:*' recent-dirs-default true
+zstyle ':chpwd:*' recent-dirs-insert fallback
 
 function copy() {
     xclip -selection c
@@ -50,19 +50,8 @@ function paste() {
     xclip -selection c -o
 }
 
-alias cdr="cd $(realpath $PWD)"
 
-grml_theme_add_token arrow '--> ' '' ''
-grml_theme_add_token pl-slash "${pl_slash}" '' '%f%b%k'
-grml_theme_add_token virtual-env -f virtual_env_prompt '%F{26}' '%f'
+alias ip="ip --color"
+alias grep="grep --color"
 
-zstyle ':prompt:grml:*:items:time' pre   '%B%K{blue}'
-zstyle ':prompt:grml:*:items:time' post  '%f%k'
-zstyle ':prompt:grml:*:items:time' token " %D{%H:%M} %b%F{blue}%K{89}${pl_slash}"
-
-zstyle ':prompt:grml:*:items:path' pre   '%K{89}'
-zstyle ':prompt:grml:*:items:path' post  '%b%k%f'
-zstyle ':prompt:grml:*:items:path' token " %40<..<%~%<< %b%k%F{89}${pl_slash} "
-zstyle ':prompt:grml:left:setup' items rc time change-root path vcs newline arrow
-
-eval "$(direnv hook zsh)"
+alias cd="cdr"
