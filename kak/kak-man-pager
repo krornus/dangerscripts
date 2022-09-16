@@ -1,2 +1,0 @@
-#!/bin/sh
-kak-pager 'source /usr/share/kak/rc/tools/man.kak; set buffer filetype man'

@@ -1,5 +1,1 @@
 set editing-mode vi
-
-"\C-u": backward-kill-line
-"\C-l": clear-screen
-Tab: complete

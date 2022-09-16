@@ -20,7 +20,7 @@ face global link rgb:ffffff,default
 face global bullet rgb:ffffff,default
 face global list rgb:e3e3e3,default
 
-face global Default rgb:bfbfbf,rgb:101010
+face global Default rgb:bfbfbf,rgb:171717
 face global PrimarySelection rgb:000000,rgb:5080d3
 face global SecondarySelection rgb:121212,rgb:81a3df
 face global PrimaryCursor default,default+r

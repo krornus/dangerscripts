@@ -1,3 +1,0 @@
-#!/bin/sh
-sed -E 's/\x1b\[[0-9]*(;[0-9]+)*m//g' | col --no-backspaces --spaces |
-kak -n -e "source /usr/share/kak/rc/tools/doc.kak; map global normal q :quit<ret>; $@"

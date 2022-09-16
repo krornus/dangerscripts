@@ -1,11 +1,14 @@
-"shutdown now"
-  XF86PowerOff
+"enlighten +5%"
+   XF86MonBrightnessUp
 
-"amixer set Master 10%+"
-  XF86AudioRaiseVolume
+"enlighten -5%"
+   XF86MonBrightnessDown
 
-"amixer set Master 10%-"
-  XF86AudioLowerVolume
+"amixer set Master 5%+"
+    XF86AudioRaiseVolume
 
-"amixer set Master 0%"
-  XF86AudioMute
+"amixer set Master 5%-"
+    XF86AudioLowerVolume
+
+"amixer set Master toggle"
+    XF86AudioMute

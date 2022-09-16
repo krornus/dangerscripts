@@ -69,7 +69,7 @@ source-all <file>
             IFS=','
             for path in ${kak_reg_a}; do
                 echo "echo -debug sourcing: ${path}"
-                echo "source ${path}"
+                echo "try %{ source ${path} } catch %{ echo -debug sourcing ${path} failed }"
             done
             IFS='\n'
         }

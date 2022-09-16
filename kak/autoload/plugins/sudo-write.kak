@@ -5,7 +5,7 @@ define-command -hidden sudo-write-impl %{
     eval -save-regs f %{
         # TOOD this could take the content of the buffer from stdin instead
         reg f %sh{ mktemp --tmpdir XXXXX }
-        write %reg{f}
+        write -force %reg{f}
         eval %sh{
             sudo -n -- dd if="$kak_main_reg_f" of="$kak_buffile" >/dev/null 2>&1
             if [ $? -eq 0 ]; then
@@ -18,43 +18,35 @@ define-command -hidden sudo-write-impl %{
     }
 }
 
-define-command -hidden -params 1 sudo-cache-password %{
-    eval -no-hooks -save-regs '"c' %{
-        eval -draft %{
-            edit -scratch *sudo-write-pass*
-            reg '"' %arg{1}
-            exec "<a-p>|sudo -S echo ok<ret>"
-            try %{
-                exec '%H<a-k>ok<ret>'
-                reg c nop
-            } catch %{
-                reg c fail
-            }
-        }
-        delete-buffer *sudo-write-pass*
-        eval %reg{c}
-    }
-}
-
-define-command -hidden sudo-prompt-password %{
+define-command -hidden -params 1 sudo-password %{
     prompt -password 'password:' %{
-        try %{
-            sudo-cache-password %val{text}
-            sudo-write-impl
-        } catch %{
-            echo -markup '{Error}incorrect password'
+        eval -no-hooks %sh{
+            printf "$1\n" | sudo -S true
+            ok=$?
+            if [ $ok -eq 0 ]; then
+                echo sudo-write-impl
+            else
+                echo fail "password is incorrect"
+            fi
         }
     }
 }
 
 define-command sudo-write -docstring "Write the content of the buffer using sudo" %{
-    %sh{
+    eval %sh{
+        # tricky posix-way of getting the first character of a variable
+        # no subprocess!
+        if [ "${kak_buffile%"${kak_buffile#?}"}" != "/" ]; then
+            # not entirely foolproof as a scratch buffer may start with '/', but good enough
+            printf 'fail "Not a file"'
+            exit
+        fi
         # check if the password is cached
         if sudo -n true > /dev/null 2>&1; then
-            echo sudo-write-impl
+            printf sudo-write-impl
         else
-            echo sudo-prompt-password
+            printf "sudo-password\n"
+            printf sudo-write-impl
         fi
     }
 }
-

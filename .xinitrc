@@ -1,3 +1,5 @@
 xbindkeys
-background --server
-exec i3
+xmodmap ~/.xmodmap
+unclutter &
+video
+exec dwm
