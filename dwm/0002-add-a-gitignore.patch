@@ -1,0 +1,25 @@
+From 76c67d8a1a5c502bf7c6bb8c0288c04dcbe01047 Mon Sep 17 00:00:00 2001
+From: Spencer Powell <krornus@gmail.com>
+Date: Fri, 16 Sep 2022 13:38:06 -0600
+Subject: [PATCH 02/10] add a gitignore
+
+---
+ .gitignore | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 .gitignore
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..e2ec094
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,6 @@
++*.orig
++*.rej
++*.o
++*.d
++config.h
++dwm
+-- 
+2.37.2
+

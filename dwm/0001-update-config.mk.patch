@@ -1,0 +1,31 @@
+From 4f35231e58714dc6288619a09659096b16e1cd64 Mon Sep 17 00:00:00 2001
+From: Spencer Powell <krornus@gmail.com>
+Date: Fri, 16 Sep 2022 13:37:55 -0600
+Subject: [PATCH 01/10] update config.mk
+
+---
+ config.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/config.mk b/config.mk
+index 81c493e..e62fac3 100644
+--- a/config.mk
++++ b/config.mk
+@@ -28,7 +28,7 @@ LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}
+ # flags
+ CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
+ #CFLAGS   = -g -std=c99 -pedantic -Wall -O0 ${INCS} ${CPPFLAGS}
+-CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os ${INCS} ${CPPFLAGS}
++CFLAGS   = -std=c99 -pedantic -Wall -Wno-deprecated-declarations -O3 ${INCS} ${CPPFLAGS}
+ LDFLAGS  = ${LIBS}
+ 
+ # Solaris
+@@ -36,4 +36,4 @@ LDFLAGS  = ${LIBS}
+ #LDFLAGS = ${LIBS}
+ 
+ # compiler and linker
+-CC = cc
++CC = gcc
+-- 
+2.37.2
+

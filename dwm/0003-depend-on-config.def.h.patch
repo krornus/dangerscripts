@@ -1,0 +1,27 @@
+From f86df3f71c97b731c245f8ea52f84d899594c082 Mon Sep 17 00:00:00 2001
+From: Spencer Powell <krornus@gmail.com>
+Date: Fri, 16 Sep 2022 13:38:49 -0600
+Subject: [PATCH 03/10] depend on config.def.h
+
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 77bcbc0..4d0cabb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,8 +19,8 @@ options:
+ 
+ ${OBJ}: config.h config.mk
+ 
+-config.h:
+-	cp config.def.h $@
++config.h: config.def.h
++	cp $^ $@
+ 
+ dwm: ${OBJ}
+ 	${CC} -o $@ ${OBJ} ${LDFLAGS}
+-- 
+2.37.2
+

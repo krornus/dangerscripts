@@ -1,0 +1,31 @@
+From b8bbb1df33b8565f7906555692b7f4c661d3dd03 Mon Sep 17 00:00:00 2001
+From: Spencer Powell <krornus@gmail.com>
+Date: Fri, 16 Sep 2022 14:41:05 -0600
+Subject: [PATCH 10/10] bandaid fix for fakefullscreen bug
+
+---
+ dwm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dwm.c b/dwm.c
+index 0371560..485cf10 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -1522,10 +1522,14 @@ setfullscreen(Client *c, int fullscreen)
+ 		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+ 			PropModeReplace, (unsigned char*)&netatom[NetWMFullscreen], 1);
+ 		c->isfullscreen = 1;
++		togglebar(NULL);
++		togglebar(NULL);
+ 	} else if (!fullscreen && c->isfullscreen){
+ 		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+ 			PropModeReplace, (unsigned char*)0, 0);
+ 		c->isfullscreen = 0;
++		togglebar(NULL);
++		togglebar(NULL);
+ 	}
+ }
+ 
+-- 
+2.37.2
+
