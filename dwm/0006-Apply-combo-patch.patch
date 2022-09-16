@@ -1,7 +1,7 @@
-From d35fece6223ff19f1eab0f8aac60b4d902543c5c Mon Sep 17 00:00:00 2001
+From 8ca18776cfd3ecb350bdb5d358c6661e0917de6b Mon Sep 17 00:00:00 2001
 From: Spencer Powell <krornus@gmail.com>
 Date: Fri, 16 Sep 2022 14:19:16 -0600
-Subject: [PATCH 08/10] apply combo patch
+Subject: [PATCH 6/8] Apply combo patch
 
 ---
  dwm.c | 43 +++++++++++++++++++++++++++++++++++++++++++

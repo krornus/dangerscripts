@@ -1,7 +1,7 @@
-From 4f35231e58714dc6288619a09659096b16e1cd64 Mon Sep 17 00:00:00 2001
+From fd347f06f63c544a75e26321001413af465676d8 Mon Sep 17 00:00:00 2001
 From: Spencer Powell <krornus@gmail.com>
 Date: Fri, 16 Sep 2022 13:37:55 -0600
-Subject: [PATCH 01/10] update config.mk
+Subject: [PATCH 1/8] Apply config.mk customizations
 
 ---
  config.mk | 4 ++--

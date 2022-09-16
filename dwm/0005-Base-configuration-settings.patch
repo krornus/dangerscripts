@@ -1,7 +1,7 @@
-From baa274c62703519fc249723b2eaa330145225184 Mon Sep 17 00:00:00 2001
+From d0334c6a4a60123d820534d138cc9d1133a64e9e Mon Sep 17 00:00:00 2001
 From: Spencer Powell <krornus@gmail.com>
 Date: Fri, 16 Sep 2022 13:52:43 -0600
-Subject: [PATCH 06/10] intial configuration
+Subject: [PATCH 5/8] Base configuration settings
 
 ---
  config.def.h | 68 +++++++++++++++++++++++++---------------------------
@@ -9,7 +9,7 @@ Subject: [PATCH 06/10] intial configuration
  2 files changed, 35 insertions(+), 74 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index a7a480c..6c0c5f2 100644
+index a7a480c..f2d7d71 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -7,30 +7,20 @@ static const int showbar            = 1;        /* 0 means no bar */
@@ -80,13 +80,13 @@ index a7a480c..6c0c5f2 100644
 +
 +static inline void nextlayout(const Arg *_)
 +{
-+    (void)_;
-+    static size_t index = 0;
-+    Arg arg;
++	(void)_;
++	static size_t index = 0;
++	Arg arg;
 +
-+    index = (index + 1) % LENGTH(layouts);
-+    arg.v = &layouts[index];
-+    setlayout(&arg);
++	index = (index + 1) % LENGTH(layouts);
++	arg.v = &layouts[index];
++	setlayout(&arg);
 +}
  
  static const Key keys[] = {

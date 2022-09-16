@@ -1,15 +1,15 @@
-From 70227649e863615b781a458538ac0d04778721e7 Mon Sep 17 00:00:00 2001
+From 781d028446fdb38b466db84d900621bcc8988f4e Mon Sep 17 00:00:00 2001
 From: Spencer Powell <krornus@gmail.com>
 Date: Fri, 16 Sep 2022 14:38:08 -0600
-Subject: [PATCH 09/10] upper/lower tags
+Subject: [PATCH 7/8] Apply upper/lower tags patch
 
 ---
- config.def.h |  61 ++++++++-------
+ config.def.h |  63 +++++++--------
  dwm.c        | 216 +++++++++++++++++++++++++++++++++++++--------------
- 2 files changed, 187 insertions(+), 90 deletions(-)
+ 2 files changed, 188 insertions(+), 91 deletions(-)
 
 diff --git a/config.def.h b/config.def.h
-index 6c0c5f2..46b9efd 100644
+index f2d7d71..1c7dfc7 100644
 --- a/config.def.h
 +++ b/config.def.h
 @@ -19,7 +19,8 @@ static const char *colors[][3]      = {
@@ -32,14 +32,21 @@ index 6c0c5f2..46b9efd 100644
 -	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 -	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 +#define TAGKEYS(ROW,KEY,TAG) \
-+	{ MODKEY,                       KEY,      ROW ## view,           {.ui = 1 << TAG} }, \
++	{ MODKEY,                       KEY,      ROW ## comboview,      {.ui = 1 << TAG} }, \
 +	{ MODKEY|ControlMask,           KEY,      ROW ## toggleview,     {.ui = 1 << TAG} }, \
-+	{ MODKEY|ShiftMask,             KEY,      ROW ## tag,            {.ui = 1 << TAG} }, \
-+	{ MODKEY|ControlMask|ShiftMask, KEY,      ROW ## toggletag,      {.ui = 1 << TAG} },
++	{ MODKEY|ShiftMask,             KEY,      ROW ## combotag,       {.ui = 1 << TAG} }, \
++	{ MODKEY|ControlMask|ShiftMask, KEY,      ROW ## toggletag,      {.ui = 1 << TAG} }
  
  /* commands */
  static const char *roficmd[] = { "rofi", "-show", "run", "-matching", "fuzzy", "-theme", "Monokai", NULL };
-@@ -77,37 +78,37 @@ static const Key keys[] = {
+@@ -71,43 +72,43 @@ static const Key keys[] = {
+ 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+ 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+ 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+-	{ MODKEY,                       XK_Tab,    view,           {0} },
++	{ MODKEY,                       XK_Tab,    upperview,      {0} },
+ 	{ MODKEY,                       XK_q,      killclient,     {0} },
+ 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
  	{ MODKEY,                       XK_y,      setlayout,      {.v = &layouts[1]} },
  	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[2]} },
  	{ MODKEY,                       XK_space,  nextlayout,     {0} },
@@ -58,16 +65,16 @@ index 6c0c5f2..46b9efd 100644
 -	TAGKEYS(                        XK_7,                      6)
 -	TAGKEYS(                        XK_8,                      7)
 -	TAGKEYS(                        XK_9,                      8)
-+	TAGKEYS(upper                   XK_a,                      0),
-+	TAGKEYS(upper                   XK_s,                      1),
-+	TAGKEYS(upper                   XK_d,                      2),
-+	TAGKEYS(upper                   XK_f,                      3),
++	TAGKEYS(upper,                  XK_a,                      0),
++	TAGKEYS(upper,                  XK_s,                      1),
++	TAGKEYS(upper,                  XK_d,                      2),
++	TAGKEYS(upper,                  XK_f,                      3),
 +	{ MODKEY,                       XK_g,      upperview,      {.ui = ~0 } },
 +	{ MODKEY|ShiftMask,             XK_g,      uppertag,       {.ui = ~0 } },
-+	TAGKEYS(lower                   XK_z,                      0),
-+	TAGKEYS(lower                   XK_x,                      1),
-+	TAGKEYS(lower                   XK_c,                      2),
-+	TAGKEYS(lower                   XK_v,                      3),
++	TAGKEYS(lower,                  XK_z,                      0),
++	TAGKEYS(lower,                  XK_x,                      1),
++	TAGKEYS(lower,                  XK_c,                      2),
++	TAGKEYS(lower,                  XK_v,                      3),
 +	{ MODKEY,                       XK_g,      lowerview,      {.ui = ~0 } },
 +	{ MODKEY|ShiftMask,             XK_g,      lowertag,       {.ui = ~0 } },
  };
@@ -102,7 +109,7 @@ index 6c0c5f2..46b9efd 100644
  };
 -
 diff --git a/dwm.c b/dwm.c
-index 86c0059..0371560 100644
+index 86c0059..799683d 100644
 --- a/dwm.c
 +++ b/dwm.c
 @@ -49,12 +49,17 @@
@@ -258,15 +265,12 @@ index 86c0059..0371560 100644
 -	unsigned newtags = arg->ui & TAGMASK;
 +uppercomboview(const Arg *arg) {
 +	unsigned newtags = arg->ui & UPPERTAGMASK;
- 	if (combo) {
--		selmon->tagset[selmon->seltags] |= newtags;
++	if (combo) {
 +		selmon->uppertagset[selmon->upperseltags] |= newtags;
- 	} else {
--		selmon->seltags ^= 1;	/*toggle tagset*/
++	} else {
 +		selmon->upperseltags ^= 1;	/*toggle tagset*/
- 		combo = 1;
- 		if (newtags)
--			selmon->tagset[selmon->seltags] = newtags;
++		combo = 1;
++		if (newtags)
 +			selmon->uppertagset[selmon->upperseltags] = newtags;
 +	}
 +	focus(NULL);
@@ -276,12 +280,15 @@ index 86c0059..0371560 100644
 +void
 +lowercomboview(const Arg *arg) {
 +	unsigned newtags = arg->ui & LOWERTAGMASK;
-+	if (combo) {
+ 	if (combo) {
+-		selmon->tagset[selmon->seltags] |= newtags;
 +		selmon->lowertagset[selmon->lowerseltags] |= newtags;
-+	} else {
+ 	} else {
+-		selmon->seltags ^= 1;	/*toggle tagset*/
 +		selmon->lowerseltags ^= 1;	/*toggle tagset*/
-+		combo = 1;
-+		if (newtags)
+ 		combo = 1;
+ 		if (newtags)
+-			selmon->tagset[selmon->seltags] = newtags;
 +			selmon->lowertagset[selmon->lowerseltags] = newtags;
  	}
  	focus(NULL);
@@ -292,12 +299,12 @@ index 86c0059..0371560 100644
  {
 -	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
 +	c->uppertags = c->uppertags & UPPERTAGMASK ?
-+	    c->uppertags & UPPERTAGMASK :
-+	    c->mon->uppertagset[c->mon->upperseltags];
++		c->uppertags & UPPERTAGMASK :
++		c->mon->uppertagset[c->mon->upperseltags];
 +
 +	c->lowertags = c->lowertags & LOWERTAGMASK ?
-+	    c->lowertags & LOWERTAGMASK :
-+	    c->mon->lowertagset[c->mon->lowerseltags];
++		c->lowertags & LOWERTAGMASK :
++		c->mon->lowertagset[c->mon->lowerseltags];
  }
  
  int
@@ -344,8 +351,8 @@ index 86c0059..0371560 100644
 +			occ |= c->uppertags;
 +
 +			if (c->isurgent)
-+    			urg |= c->uppertags;
-+    	}
++				urg |= c->uppertags;
++		}
  	}
  	x = 0;
 -	for (i = 0; i < LENGTH(tags); i++) {
@@ -389,7 +396,9 @@ index 86c0059..0371560 100644
  void
 -tag(const Arg *arg)
 +uppertag(const Arg *arg)
-+{
+ {
+-	if (selmon->sel && arg->ui & TAGMASK) {
+-		selmon->sel->tags = arg->ui & TAGMASK;
 +	if (selmon->sel && arg->ui & UPPERTAGMASK) {
 +		selmon->sel->uppertags = arg->ui & UPPERTAGMASK;
 +		focus(NULL);
@@ -399,9 +408,7 @@ index 86c0059..0371560 100644
 +
 +void
 +lowertag(const Arg *arg)
- {
--	if (selmon->sel && arg->ui & TAGMASK) {
--		selmon->sel->tags = arg->ui & TAGMASK;
++{
 +	if (selmon->sel && arg->ui & LOWERTAGMASK) {
 +		selmon->sel->lowertags = arg->ui & LOWERTAGMASK;
  		focus(NULL);

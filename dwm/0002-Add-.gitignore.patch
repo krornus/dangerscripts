@@ -1,7 +1,7 @@
-From 76c67d8a1a5c502bf7c6bb8c0288c04dcbe01047 Mon Sep 17 00:00:00 2001
+From 7ba6a9e261654fab3ecc8e5b939e02028859cec8 Mon Sep 17 00:00:00 2001
 From: Spencer Powell <krornus@gmail.com>
 Date: Fri, 16 Sep 2022 13:38:06 -0600
-Subject: [PATCH 02/10] add a gitignore
+Subject: [PATCH 2/8] Add .gitignore
 
 ---
  .gitignore | 6 ++++++

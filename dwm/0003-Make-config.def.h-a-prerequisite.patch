@@ -1,7 +1,7 @@
-From f86df3f71c97b731c245f8ea52f84d899594c082 Mon Sep 17 00:00:00 2001
+From e35cae150213b79647257371e27451ec27849ed2 Mon Sep 17 00:00:00 2001
 From: Spencer Powell <krornus@gmail.com>
 Date: Fri, 16 Sep 2022 13:38:49 -0600
-Subject: [PATCH 03/10] depend on config.def.h
+Subject: [PATCH 3/8] Make config.def.h a prerequisite
 
 ---
  Makefile | 4 ++--

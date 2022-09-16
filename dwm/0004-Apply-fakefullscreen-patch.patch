@@ -1,7 +1,7 @@
-From 2750f26d206a2e36a5eedc3b9c28331f2c1ee12e Mon Sep 17 00:00:00 2001
+From 3200a2e6516a6764598eda2f41ecb71a800f1f3a Mon Sep 17 00:00:00 2001
 From: Spencer Powell <krornus@gmail.com>
 Date: Fri, 16 Sep 2022 13:40:38 -0600
-Subject: [PATCH 05/10] apply fakefullscreen patch
+Subject: [PATCH 4/8] Apply fakefullscreen patch
 
 ---
  config.def.h |  2 +-
