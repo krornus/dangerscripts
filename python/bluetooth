@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+import time
+import click
+import subprocess
+
+BOSE = '28:11:A5:49:71:AA'
+RAYCON = '00:14:BE:31:51:6A'
+
+def process(*args, **kwargs):
+    kwargs.setdefault('check', True)
+
+    print(' '.join(args))
+
+    return subprocess.run(args, **kwargs)
+
+def restart():
+    if process('pulseaudio', '--check', check=False).returncode == 0:
+        process('pulseaudio', '--kill')
+
+    for _ in range(5):
+        time.sleep(1)
+
+        try:
+            process('pulseaudio', '--daemonize')
+            return
+        except subprocess.CalledProcessError as e:
+            pass
+
+    raise e
+
+def connect(mac):
+    process('bluetoothctl', 'connect', mac)
+
+@click.group()
+@click.option('--start/--no-start', '-s', default=False)
+@click.option('--force/--no-force', '-f', default=False)
+@click.option('--reconnect/--no-reconnect', '-r', default=False)
+def cli(start, force, reconnect):
+    if start:
+        process('systemctl', 'start', 'bluetooth.service')
+        process('systemctl', 'status', 'bluetooth.service')
+
+    if force:
+        restart()
+
+    if reconnect:
+        process('bluetoothctl', 'disconnect')
+        time.sleep(1)
+
+
+@cli.command()
+def bose():
+    connect(BOSE)
+
+@cli.command()
+def raycon():
+    connect(RAYCON)
+
+if __name__ == '__main__':
+    try:
+        cli()
+    except subprocess.CalledProcessError as e:
+        exit(1)
