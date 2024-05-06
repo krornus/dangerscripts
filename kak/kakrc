@@ -2,6 +2,10 @@
 #           plugins            #
 ################################
 
+# First time setup
+# git clone https://codeberg.org/jdugan6240/kak-bundle $HOME/.config/kak/autoload/bundle/kak-bundle
+# :bundle-install
+
 set-option global bundle_parallel %sh{nproc}
 
 define-command -params 1 bundle-load %{
