@@ -1,16 +1,73 @@
 ################################
+#           plugins            #
+################################
+
+set-option global bundle_parallel %sh{nproc}
+
+define-command -params 1 bundle-load %{
+    source "%opt{bundle_path}/%arg{1}-load.kak"
+}
+
+bundle kakoune-cd https://github.com/delapouite/kakoune-cd %{
+    alias global cdc change-directory-current-buffer
+    alias global pwd  print-working-directory
+}
+
+bundle kakoune-source https://github.com/krornus/kakoune-source %{
+    source-all ".kakrc"
+}
+
+bundle-noload kakoune-toggle-map https://github.com/krornus/kakoune-toggle-map %{
+    toggle-map global normal <F3> hlsearch-on hlsearch-off
+}
+
+bundle kakoune-hlsearch https://github.com/krornus/kakoune-hlsearch %{
+    bundle-load kakoune-toggle-map
+}
+
+bundle-noload kakoune-buffers https://github.com/delapouite/kakoune-buffers %{
+    map global normal  b ": enter-user-mode buffers<ret>"
+    map global buffers b ": peneira-buffers<ret>" -docstring "find buffer"
+    map global buffers f ": peneira-files -hide-opened<ret>" -docstring "find file"
+    map global buffers F ": peneira-local-files<ret>" -docstring "find file (local)"
+    map global buffers s ": peneira-lines<ret>" -docstring "find line"
+}
+
+bundle-noload peneira-filters https://codeberg.org/mbauhardt/peneira-filters %{
+    require-module peneira-buffers
+}
+
+bundle-noload peneira https://github.com/gustavo-hms/peneira %{
+    require-module peneira
+    set-option global peneira_files_command "rg --files"
+    bundle-load peneira-filters
+    bundle-load kakoune-buffers
+}
+
+bundle-noload mru-files 'git clone https://gitlab.com/kstr0k/mru-files.kak.git mru-files' %{
+    require-module mru-files
+    bundle-load peneira
+}
+
+bundle luar https://github.com/gustavo-hms/luar %{
+    set-option global luar_interpreter luajit
+    bundle-load mru-files
+}
+
+################################
 #           options            #
 ################################
 colorscheme dracula
 
 set-option global tabstop       4
 set-option global indentwidth   0
-set-option global softtabstop   %opt{tabstop}
 
 set-option global jumpclient    client0
 set-option global toolsclient   client1
 set-option global docsclient    client1
 
+set-option global grepcmd 'rg -Hn'
+set-option global ignored_files %sh{git-ignored | paste -sd '|'}
 set-option global matching_pairs ( ) { } [ ]
 
 ################################
@@ -18,46 +75,29 @@ set-option global matching_pairs ( ) { } [ ]
 ################################
 alias global x    write-quit
 alias global W    write
-alias global cdcb change-directory-current-buffer
-alias global pwd  print-working-directory
 alias global rns  rename-session
 alias global rnc  rename-client
-alias global on   buffer-only
-
-toggle-map global normal <F3> hlsearch-on hlsearch-off
 
 map -docstring "comment line" global user c "<esc>: comment-line<ret>"
 map -docstring "make" global user m ": make<ret>"
 map -docstring "eval selection" global user x ": <c-r>.<ret>"
 map -docstring "fold" global user f "| fold -sw 80<ret>"
 map -docstring "yank (x11)" global user y "<a-|> xclip -selection c<ret>"
+map -docstring "spell-check" global user s "| spell-check<ret>"
 
 # b->q, q->user mode, b->buffers mode
 map global normal q b
 map global normal Q B
 map global normal <a-q> <a-b>
 map global normal <a-Q> <a-B>
-map global normal b ": enter-user-mode buffers<ret>"
 
-# add location to jumplist before searching
-map global normal / <c-s>/
-map global normal ? <c-s>?
-map global normal <a-/> <c-s><a-/>
-map global normal <a-?> <c-s><a-?>
-map global normal * <c-s>*
-
-# highlight pasted contents
-map global normal p %{puU}
-map global normal P %{PuU}
+# old space/comma order
+map global normal , <space>
+map global normal <space> ,
 
 ################################
 #           hooks              #
 ################################
-
-hook global WinCreate .* %{
-    expandtab
-}
-
 # relative line numbers
 hook global WinCreate (?S)^[^*].+[^*]$ %{
     add-highlighter window/relnum number-lines -relative -hlcursor
@@ -93,6 +133,13 @@ add-highlighter global/matching show-matching
 add-highlighter global/trailing regex '\h+$' 0:default,rgb:424242
 
 ################################
-#          local kakrc         #
+#      commands            #
 ################################
-source-all ".kakrc"
+define-command -docstring %{
+Start the language server
+} lsp-begin %{
+    evaluate-commands %sh{ kak-lsp --kakoune -s $kak_session }
+    map -docstring "lsp mode"   global user l ": enter-user-mode lsp<ret>"
+    map -docstring "definition" global user d "<esc>: lsp-definition<ret>"
+    map -docstring "error"      global user n "<esc>: lsp-find-error<ret>"
+}
