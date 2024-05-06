@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+FZF=1
+
+if [ ! -t 1 ]; then
+    FZF=0
+elif ! command -v fzf 2>&1 > /dev/null; then
+    FZF=0
+fi
+
+if [ $FZF -eq 0 ]; then
+    find -iwholename "*$1*"
+else
+    SEL=$(find -iwholename "*$1*" | fzf)
+    echo -n $SEL | xclip -selection c
+    echo $SEL
+fi

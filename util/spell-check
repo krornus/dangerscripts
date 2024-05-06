@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function replacements()
+{
+	sed -nE '/&.+?:/!d; s/&.+?://p' |
+		tr ',' '\n' 				|
+		sed -E 's/^\s*//'
+	echo $1
+}
+
+if [ $# -gt 0 ]; then
+    input=$@
+else
+    read input
+fi
+
+set -- $input
+printf -- $input 		|
+	aspell pipe			|
+	replacements $input |
+	rofi -dmenu -auto-select -matching fuzzy -theme Monokai ||
+	echo $1

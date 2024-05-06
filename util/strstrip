@@ -1,0 +1,42 @@
+#!/bin/bash
+
+function usage()
+{
+    echo "usage: $0 [-lr]" 1>&2
+    exit $1
+}
+
+LPATTERN='s/^\s*//;'
+RPATTERN='s/\s*$//'
+
+if [ $# -lt 1 ]; then
+    LEFT=1
+    RIGHT=1
+else
+    LEFT=0
+    RIGHT=0
+
+    while getopts lr c; do
+        case $c in
+            l)
+                LEFT=1
+                ;;
+            r)
+                RIGHT=1
+                ;;
+            *)
+                usage 1
+                ;;
+        esac
+    done
+fi
+
+if [ $LEFT -eq 1 ]; then
+    PATTERN=$LPATTERN
+fi
+
+if [ $RIGHT -eq 1 ]; then
+    PATTERN=$PATTERN$RPATTERN
+fi
+
+perl -p -e $PATTERN -
