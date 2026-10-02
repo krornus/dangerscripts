@@ -164,6 +164,15 @@ hook -group lsp-filetype-clangd global BufSetOption filetype=(?:c|cpp) %{
     }
 }
 
+hook -group lsp-filetype-python global BufSetOption filetype=python %{
+    set-option buffer lsp_servers %{
+        [pyrefly]
+        root_globs = ["pyproject.toml", "setup.py", "poetry.lock", ".git", ".hg"]
+        command = "pyrefly"
+        args = ["lsp"]
+    }
+}
+
 hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp|gdscript) %{
     lsp-enable-window
     map -docstring "lsp mode" global user l ": enter-user-mode lsp<ret>"
