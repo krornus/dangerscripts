@@ -3,11 +3,13 @@
 ################################
 
 # First time setup
-# mkdir -p $HOME/.config/kak/autoload
-# ln -s /usr/share/kak/autoload $HOME/.config/kak/autoload/autoload
 # git clone https://codeberg.org/jdugan6240/kak-bundle $HOME/.config/kak/autoload/bundle/kak-bundle
 # :bundle-install
 # pacman -S luajit
+
+set-option global tabstop       4
+set-option global indentwidth   4
+set-option global aligntab      false
 
 set-option global bundle_parallel %sh{nproc}
 
@@ -34,10 +36,6 @@ bundle kakoune-hlsearch https://github.com/krornus/kakoune-hlsearch %{
 
 bundle-noload kakoune-buffers https://github.com/delapouite/kakoune-buffers %{
     map global normal  b ": enter-user-mode buffers<ret>"
-    map global buffers b ": peneira-buffers<ret>" -docstring "find buffer"
-    map global buffers f ": peneira-files -hide-opened<ret>" -docstring "find file"
-    map global buffers F ": peneira-local-files<ret>" -docstring "find file (local)"
-    map global buffers s ": peneira-lines<ret>" -docstring "find line"
 }
 
 bundle-noload peneira-filters https://codeberg.org/mbauhardt/peneira-filters %{
@@ -47,13 +45,19 @@ bundle-noload peneira-filters https://codeberg.org/mbauhardt/peneira-filters %{
 bundle-noload peneira https://github.com/gustavo-hms/peneira %{
     require-module peneira
     set-option global peneira_files_command "rg --files"
+
     bundle-load peneira-filters
     bundle-load kakoune-buffers
+
+    map global buffers b ": peneira-buffers<ret>" -docstring "find buffer"
+    map global buffers f ": peneira-mru<ret>" -docstring "find file"
 }
 
 bundle-noload mru-files 'git clone https://gitlab.com/kstr0k/mru-files.kak.git mru-files' %{
     require-module mru-files
     bundle-load peneira
+
+    set-option global mru_files_max 100
 }
 
 bundle luar https://github.com/gustavo-hms/luar %{
@@ -61,22 +65,16 @@ bundle luar https://github.com/gustavo-hms/luar %{
     bundle-load mru-files
 }
 
-bundle kakoune-cargo https://gitlab.com/Screwtapello/kakoune-cargo.git %{ }
-
-bundle smarttab.kak https://github.com/andreyorst/smarttab.kak %{
-    # these languages will use `expandtab' behavior
-    hook global WinSetOption filetype=.* expandtab
-    # these languages will use `noexpandtab' behavior
-    hook global WinSetOption filetype=(makefile|gas) noexpandtab
+bundle kakoune-cargo https://gitlab.com/Screwtapello/kakoune-cargo.git %{
+    hook global WinSetOption filetype=rust %{
+        map -docstring "cargo build" global user m ": cargo build<ret>"
+    }
 }
 
 ################################
 #           options            #
 ################################
 colorscheme gruvbox-clear
-
-set-option global tabstop       4
-set-option global indentwidth   0
 
 set-option global jumpclient    client0
 set-option global toolsclient   client1
@@ -138,6 +136,16 @@ hook global InsertChar k %{ try %{
     exec <esc>
 }}
 
+require-module vimtab
+
+hook global BufCreate .* %{
+    expandtab
+}
+
+hook global WinSetOption filetype=makefile %{
+    noexpandtab
+}
+
 ################################
 #          highlighters        #
 ################################
@@ -146,11 +154,28 @@ add-highlighter global/matching show-matching
 add-highlighter global/trailing regex '\h+$' 0:default,rgb:424242
 
 eval %sh{kak-lsp}
-hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp) %{
-    lsp-enable-window
-    map -docstring "lsp mode" global user l ": enter-user-mode lsp<ret>"
+set-option global lsp_snippet_support false
+
+hook -group lsp-filetype-clangd global BufSetOption filetype=(?:c|cpp) %{
+    set-option buffer lsp_servers %{
+        [clangd]
+        args = ["--log=error"]
+        root_globs = ["compile_commands.json", ".clangd", ".git", ".hg"]
+    }
 }
 
-hook global WinSetOption filetype=rust %{
-    map -docstring "cargo" global user m ": cargo build<ret>"
+hook -group lsp-filetype-python global BufSetOption filetype=python %{
+    set-option buffer lsp_servers %{
+        [pyrefly]
+        root_globs = ["pyproject.toml", "setup.py", "poetry.lock", ".git", ".hg"]
+        command = "pyrefly"
+        args = ["lsp"]
+    }
+}
+
+hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp|gdscript) %{
+    lsp-enable-window
+    map -docstring "lsp mode" global user l ": enter-user-mode lsp<ret>"
+    map -docstring "goto definition" global goto d "<esc>: lsp-definition<ret>"
+    map -docstring "goto symbol" global goto s "<esc>: lsp-goto-document-symbol<ret>"
 }
