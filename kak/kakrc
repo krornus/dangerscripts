@@ -5,6 +5,11 @@
 # First time setup
 # git clone https://codeberg.org/jdugan6240/kak-bundle $HOME/.config/kak/autoload/bundle/kak-bundle
 # :bundle-install
+# pacman -S luajit
+
+set-option global tabstop       4
+set-option global indentwidth   4
+set-option global aligntab      false
 
 set-option global bundle_parallel %sh{nproc}
 
@@ -31,10 +36,6 @@ bundle kakoune-hlsearch https://github.com/krornus/kakoune-hlsearch %{
 
 bundle-noload kakoune-buffers https://github.com/delapouite/kakoune-buffers %{
     map global normal  b ": enter-user-mode buffers<ret>"
-    map global buffers b ": peneira-buffers<ret>" -docstring "find buffer"
-    map global buffers f ": peneira-files -hide-opened<ret>" -docstring "find file"
-    map global buffers F ": peneira-local-files<ret>" -docstring "find file (local)"
-    map global buffers s ": peneira-lines<ret>" -docstring "find line"
 }
 
 bundle-noload peneira-filters https://codeberg.org/mbauhardt/peneira-filters %{
@@ -44,13 +45,19 @@ bundle-noload peneira-filters https://codeberg.org/mbauhardt/peneira-filters %{
 bundle-noload peneira https://github.com/gustavo-hms/peneira %{
     require-module peneira
     set-option global peneira_files_command "rg --files"
+
     bundle-load peneira-filters
     bundle-load kakoune-buffers
+
+    map global buffers b ": peneira-buffers<ret>" -docstring "find buffer"
+    map global buffers f ": peneira-mru<ret>" -docstring "find file"
 }
 
 bundle-noload mru-files 'git clone https://gitlab.com/kstr0k/mru-files.kak.git mru-files' %{
     require-module mru-files
     bundle-load peneira
+
+    set-option global mru_files_max 100
 }
 
 bundle luar https://github.com/gustavo-hms/luar %{
@@ -58,13 +65,16 @@ bundle luar https://github.com/gustavo-hms/luar %{
     bundle-load mru-files
 }
 
+bundle kakoune-cargo https://gitlab.com/Screwtapello/kakoune-cargo.git %{
+    hook global WinSetOption filetype=rust %{
+        map -docstring "cargo build" global user m ": cargo build<ret>"
+    }
+}
+
 ################################
 #           options            #
 ################################
-colorscheme dracula
-
-set-option global tabstop       4
-set-option global indentwidth   0
+colorscheme gruvbox-clear
 
 set-option global jumpclient    client0
 set-option global toolsclient   client1
@@ -84,10 +94,7 @@ alias global rnc  rename-client
 
 map -docstring "comment line" global user c "<esc>: comment-line<ret>"
 map -docstring "make" global user m ": make<ret>"
-map -docstring "eval selection" global user x ": <c-r>.<ret>"
-map -docstring "fold" global user f "| fold -sw 80<ret>"
-map -docstring "yank (x11)" global user y "<a-|> xclip -selection c<ret>"
-map -docstring "spell-check" global user s "| spell-check<ret>"
+map -docstring "yank" global user y "<a-|> wl-copy<ret>"
 
 # b->q, q->user mode, b->buffers mode
 map global normal q b
@@ -129,6 +136,16 @@ hook global InsertChar k %{ try %{
     exec <esc>
 }}
 
+require-module vimtab
+
+hook global BufCreate .* %{
+    expandtab
+}
+
+hook global WinSetOption filetype=makefile %{
+    noexpandtab
+}
+
 ################################
 #          highlighters        #
 ################################
@@ -136,14 +153,20 @@ hook global InsertChar k %{ try %{
 add-highlighter global/matching show-matching
 add-highlighter global/trailing regex '\h+$' 0:default,rgb:424242
 
-################################
-#      commands            #
-################################
-define-command -docstring %{
-Start the language server
-} lsp-begin %{
-    evaluate-commands %sh{ kak-lsp --kakoune -s $kak_session }
-    map -docstring "lsp mode"   global user l ": enter-user-mode lsp<ret>"
-    map -docstring "definition" global user d "<esc>: lsp-definition<ret>"
-    map -docstring "error"      global user n "<esc>: lsp-find-error<ret>"
+eval %sh{kak-lsp}
+set-option global lsp_snippet_support false
+
+hook -group lsp-filetype-clangd global BufSetOption filetype=(?:c|cpp) %{
+    set-option buffer lsp_servers %{
+        [clangd]
+        args = ["--log=error"]
+        root_globs = ["compile_commands.json", ".clangd", ".git", ".hg"]
+    }
+}
+
+hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp|gdscript) %{
+    lsp-enable-window
+    map -docstring "lsp mode" global user l ": enter-user-mode lsp<ret>"
+    map -docstring "goto definition" global goto d "<esc>: lsp-definition<ret>"
+    map -docstring "goto symbol" global goto s "<esc>: lsp-goto-document-symbol<ret>"
 }
