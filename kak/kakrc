@@ -3,8 +3,11 @@
 ################################
 
 # First time setup
+# mkdir -p $HOME/.config/kak/autoload
+# ln -s /usr/share/kak/autoload $HOME/.config/kak/autoload/autoload
 # git clone https://codeberg.org/jdugan6240/kak-bundle $HOME/.config/kak/autoload/bundle/kak-bundle
 # :bundle-install
+# pacman -S luajit
 
 set-option global bundle_parallel %sh{nproc}
 
@@ -58,10 +61,19 @@ bundle luar https://github.com/gustavo-hms/luar %{
     bundle-load mru-files
 }
 
+bundle kakoune-cargo https://gitlab.com/Screwtapello/kakoune-cargo.git %{ }
+
+bundle smarttab.kak https://github.com/andreyorst/smarttab.kak %{
+    # these languages will use `expandtab' behavior
+    hook global WinSetOption filetype=.* expandtab
+    # these languages will use `noexpandtab' behavior
+    hook global WinSetOption filetype=(makefile|gas) noexpandtab
+}
+
 ################################
 #           options            #
 ################################
-colorscheme dracula
+colorscheme gruvbox-clear
 
 set-option global tabstop       4
 set-option global indentwidth   0
@@ -84,10 +96,7 @@ alias global rnc  rename-client
 
 map -docstring "comment line" global user c "<esc>: comment-line<ret>"
 map -docstring "make" global user m ": make<ret>"
-map -docstring "eval selection" global user x ": <c-r>.<ret>"
-map -docstring "fold" global user f "| fold -sw 80<ret>"
-map -docstring "yank (x11)" global user y "<a-|> xclip -selection c<ret>"
-map -docstring "spell-check" global user s "| spell-check<ret>"
+map -docstring "yank" global user y "<a-|> wl-copy<ret>"
 
 # b->q, q->user mode, b->buffers mode
 map global normal q b
@@ -136,14 +145,12 @@ hook global InsertChar k %{ try %{
 add-highlighter global/matching show-matching
 add-highlighter global/trailing regex '\h+$' 0:default,rgb:424242
 
-################################
-#      commands            #
-################################
-define-command -docstring %{
-Start the language server
-} lsp-begin %{
-    evaluate-commands %sh{ kak-lsp --kakoune -s $kak_session }
-    map -docstring "lsp mode"   global user l ": enter-user-mode lsp<ret>"
-    map -docstring "definition" global user d "<esc>: lsp-definition<ret>"
-    map -docstring "error"      global user n "<esc>: lsp-find-error<ret>"
+eval %sh{kak-lsp}
+hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp) %{
+    lsp-enable-window
+    map -docstring "lsp mode" global user l ": enter-user-mode lsp<ret>"
+}
+
+hook global WinSetOption filetype=rust %{
+    map -docstring "cargo" global user m ": cargo build<ret>"
 }

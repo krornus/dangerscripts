@@ -1,0 +1,73 @@
+{
+    "layer": "top",
+    "spacing": 10,
+    "position": "bottom", // Waybar position (top|bottom|left|right)
+    "modules-left": ["sway/mode", "sway/workspaces"],
+    "modules-center": ["clock", "custom/firefox", "custom/terminal"],
+    "modules-right": [ "network", "battery" ],
+    "sway/workspaces": {
+        "disable-scroll": false,
+        "disable-scroll-wraparound": true,
+        "disable-auto-back-and-forth": false,
+        "all-outputs": false,
+        "format": "{icon}"
+    },
+    "clock": {
+        "tooltip-format": "{:%Y-%m-%d | %H:%M}",
+        "format-alt": "{:%Y-%m-%d}",
+        "format": "{:%Y-%m-%d | %I:%M}",
+    },
+    "battery": {
+        "states": {
+            "full": 100,
+            "ninety": 90,
+            "eighty": 80,
+            "seventy": 70,
+            "sixty": 60,
+            "fifty": 50,
+            "forty": 40,
+            "thirty": 30,
+            "twenty": 20,
+            "ten": 10
+        },
+        "format-full": "󰁹",
+        "format-ninety": "󰂂",
+        "format-eighty": "󰂁",
+        "format-seventy": "󰂀",
+        "format-sixty": "󰁿",
+        "format-fifty": "󰁾",
+        "format-forty": "󰁽",
+        "format-thirty": "󰁼",
+        "format-twenty": "󰁻",
+        "format-ten": "󰁺",
+        "format-charging-full": "󰂅",
+        "format-charging-ninety": "󰂋",
+        "format-charging-eighty": "󰂊",
+        "format-charging-seventy": "󰢞",
+        "format-charging-sixty": "󰂉",
+        "format-charging-fifty": "󰢝",
+        "format-charging-forty": "󰂈",
+        "format-charging-thirty": "󰂇",
+        "format-charging-twenty": "󰂆",
+        "format-charging-ten": "󰢜",
+        "tooltip-format": "{capacity}% {time}"
+    },
+    "network": {
+        "format-wifi": "{ipaddr}   ",
+        "format-ethernet": "{ipaddr}   ",
+        "format-linked": "󰈀 ",
+        "format-disconnected": " ",
+        "format-alt": "{essid} {signalStrength}%",
+        "tooltop": false
+    },
+    "custom/firefox": {
+        "format": "󰈹",
+        "tooltip": false,
+        "on-click": "firefox"
+    },
+    "custom/terminal": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "foot"
+    }
+}

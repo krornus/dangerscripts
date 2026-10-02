@@ -1,0 +1,90 @@
+* {
+    font-weight: bold;
+    font-size: 12px;
+    min-height: 0;
+    color: #d9b99b;
+}
+
+window#waybar {
+    background: rgba(0, 0, 0, 0);
+    padding: 0px 5px 10px 5px;
+}
+
+#battery {
+    font-size: 16px;
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+    margin: 0px 5px 3px 5px;
+    background-color: #080808;
+}
+
+#battery:hover {
+    color: #ffffff;
+}
+
+#battery.thirty {
+    color: orange;
+}
+
+#battery.twenty {
+    color: orange;
+}
+
+#battery.ten {
+    color: red;
+}
+
+#network {
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+    margin: 0px 5px 3px 5px;
+    background-color: #080808;
+}
+
+#network:hover {
+    color: #ffffff;
+}
+
+#network.disconnected {
+	color: red;
+}
+
+#clock {
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+    margin: 0px 5px 3px 5px;
+    background-color: #080808;
+}
+
+#clock:hover {
+    color: #ffffff;
+}
+
+#workspaces button {
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+    margin: 0px 5px 3px 5px;
+    background-color: #080808;
+}
+
+#custom-firefox {
+    border-radius: 10px;
+    padding: 0px 22px 0px 20px;
+    margin: 0px 0px 3px 0px;
+    background-color: #080808;
+}
+
+#custom-firefox:hover {
+    color: #e66000;
+}
+
+#custom-terminal {
+    border-radius: 10px;
+    padding: 0px 22px 0px 20px;
+    margin: 0px 0px 3px 0px;
+    background-color: #080808;
+}
+
+#custom-terminal:hover {
+    color: #4af626;
+}
